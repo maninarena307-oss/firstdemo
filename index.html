@@ -3,16 +3,78 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>firstdemo</title>
+  <title>오늘의 사주 운세</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="stars" id="stars"></div>
+
   <div class="container">
-    <h1>안녕하세요!</h1>
-    <p>첫 번째 웹사이트입니다.</p>
-    <button id="btn">클릭해보세요</button>
-    <p id="message"></p>
+    <header>
+      <div class="title-symbol">☯</div>
+      <h1>오늘의 사주 운세</h1>
+      <p class="subtitle">이름과 생년월일을 입력하면 오늘의 운세를 풀이해드립니다</p>
+    </header>
+
+    <section class="form-section">
+      <div class="input-group">
+        <label for="name">이름</label>
+        <input type="text" id="name" placeholder="이름을 입력하세요" maxlength="10" />
+      </div>
+      <div class="input-group">
+        <label for="birthdate">생년월일</label>
+        <input type="date" id="birthdate" />
+      </div>
+      <button id="fortune-btn">운세 보기 ✨</button>
+    </section>
+
+    <section class="result-section" id="result" style="display:none;">
+      <div class="saju-info" id="saju-info"></div>
+      <h2 class="result-title" id="result-title"></h2>
+
+      <div class="fortune-grid">
+        <div class="fortune-card" id="card-total">
+          <div class="card-icon">🌟</div>
+          <div class="card-label">총운</div>
+          <div class="card-stars" id="stars-total"></div>
+          <div class="card-text" id="text-total"></div>
+        </div>
+        <div class="fortune-card" id="card-wealth">
+          <div class="card-icon">💰</div>
+          <div class="card-label">재물운</div>
+          <div class="card-stars" id="stars-wealth"></div>
+          <div class="card-text" id="text-wealth"></div>
+        </div>
+        <div class="fortune-card" id="card-love">
+          <div class="card-icon">💕</div>
+          <div class="card-label">애정운</div>
+          <div class="card-stars" id="stars-love"></div>
+          <div class="card-text" id="text-love"></div>
+        </div>
+        <div class="fortune-card" id="card-health">
+          <div class="card-icon">🌿</div>
+          <div class="card-label">건강운</div>
+          <div class="card-stars" id="stars-health"></div>
+          <div class="card-text" id="text-health"></div>
+        </div>
+        <div class="fortune-card" id="card-work">
+          <div class="card-icon">💼</div>
+          <div class="card-label">직업운</div>
+          <div class="card-stars" id="stars-work"></div>
+          <div class="card-text" id="text-work"></div>
+        </div>
+        <div class="fortune-card" id="card-lucky">
+          <div class="card-icon">🍀</div>
+          <div class="card-label">행운 정보</div>
+          <div class="card-text" id="text-lucky"></div>
+        </div>
+      </div>
+
+      <div class="advice-box" id="advice-box"></div>
+      <button class="retry-btn" id="retry-btn">다시 보기</button>
+    </section>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
