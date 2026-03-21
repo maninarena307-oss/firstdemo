@@ -148,36 +148,89 @@ function generateFortune(name, birthdate) {
   return { stem, branch, zodiac, element, age, birthYear, birthMonth, birthDay, levels, luckyColor, luckyNum, luckyDir, adviceIdx, todayStr, name };
 }
 
+// ── 게이지 SVG 생성 ──────────────────────────────────────────
+const GAUGE_COLORS  = ['#e74c3c', '#e67e22', '#f1c40f', '#2ecc71', '#ffd700'];
+const GAUGE_GLOWS   = ['rgba(231,76,60,0.6)', 'rgba(230,126,34,0.6)', 'rgba(241,196,15,0.6)', 'rgba(46,204,113,0.6)', 'rgba(255,215,0,0.8)'];
+const LEVEL_NAMES   = ['하', '중하', '중', '중상', '대길'];
+const CAT_META = [
+  { key: 'total',  label: '총운',  icon: '🌟' },
+  { key: 'wealth', label: '재물운', icon: '💰' },
+  { key: 'love',   label: '애정운', icon: '💕' },
+  { key: 'health', label: '건강운', icon: '🌿' },
+  { key: 'work',   label: '직업운', icon: '💼' },
+];
+
+function buildGauge(level) {
+  const R = 42, cx = 60, cy = 56;
+  const startX = cx - R, endX = cx + R;
+  const arcLen  = Math.PI * R;
+  const dash    = ((level + 1) / 5) * arcLen;
+  const color   = GAUGE_COLORS[level];
+  const glow    = GAUGE_GLOWS[level];
+  const lName   = LEVEL_NAMES[level];
+  const filterId = `glow-${Math.random().toString(36).slice(2)}`;
+
+  return `
+    <svg class="gauge-svg" viewBox="0 0 120 68">
+      <defs>
+        <filter id="${filterId}" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <path class="gauge-track"
+        d="M ${startX} ${cy} A ${R} ${R} 0 0 1 ${endX} ${cy}" />
+      <path class="gauge-fill"
+        d="M ${startX} ${cy} A ${R} ${R} 0 0 1 ${endX} ${cy}"
+        stroke="${color}"
+        style="--dash:${dash};--total:${arcLen};filter:url(#${filterId})"
+        stroke-dasharray="${dash} ${arcLen}" />
+      <text class="gauge-level-text" x="${cx}" y="${cy - 8}"
+        text-anchor="middle" fill="${color}">${lName}</text>
+    </svg>`;
+}
+
 // ── 결과 렌더링 ───────────────────────────────────────────────
 function renderResult(data) {
-  const { stem, branch, zodiac, element, age, birthYear, birthMonth, birthDay, levels, luckyColor, luckyNum, luckyDir, adviceIdx, todayStr, name } = data;
+  const { stem, branch, zodiac, element, age, birthYear, birthMonth, birthDay,
+          levels, luckyColor, luckyNum, luckyDir, adviceIdx, todayStr, name } = data;
 
-  document.getElementById('saju-info').innerHTML = `
-    <strong>${name}</strong>님 · ${birthYear}년 ${birthMonth}월 ${birthDay}일생 · ${age}세<br>
-    ${stem}${branch}년생 · 오행: ${element}(${element === '목' ? '🌳' : element === '화' ? '🔥' : element === '토' ? '🌏' : element === '금' ? '⚡' : '💧'}) · 띠: ${zodiac.name} ${zodiac.emoji}
-  `;
+  const elEmoji = { '목':'🌳', '화':'🔥', '토':'🌏', '금':'⚡', '수':'💧' };
 
-  document.getElementById('result-title').textContent = `${todayStr} 운세`;
+  // 헤더
+  document.getElementById('result-header').innerHTML =
+    `<strong>${name}</strong>님의 ${todayStr} 운세<br>
+     ${stem}${branch}년 · ${elEmoji[element]} ${element}(${element}) · ${zodiac.emoji} ${zodiac.name}띠 · ${age}세`;
 
-  // 카드 렌더링
-  const categories = ['total', 'wealth', 'love', 'health', 'work'];
-  categories.forEach(cat => {
-    document.getElementById(`stars-${cat}`).textContent = getStars(levels[cat]);
-    document.getElementById(`text-${cat}`).textContent = FORTUNE_TEXTS[cat][levels[cat]];
-  });
+  // 게이지 그리드
+  document.getElementById('gauge-grid').innerHTML = CAT_META.map(({ key, label, icon }) => `
+    <div class="gauge-item">
+      ${buildGauge(levels[key])}
+      <div class="gauge-icon">${icon}</div>
+      <div class="gauge-label">${label}</div>
+    </div>`).join('');
 
-  // 행운 카드
-  document.getElementById('text-lucky').innerHTML = `
-    🎨 행운의 색: <strong style="color:#ffd700">${luckyColor}</strong><br>
-    🔢 행운의 숫자: <strong style="color:#ffd700">${luckyNum}</strong><br>
-    🧭 행운의 방향: <strong style="color:#ffd700">${luckyDir}</strong>
-  `;
+  // 간단 조언
+  document.getElementById('advice-simple').textContent = ADVICE_TEXTS[adviceIdx];
 
-  // 오늘의 조언
-  document.getElementById('advice-box').innerHTML = `
-    <strong style="color:#ffd700; display:block; margin-bottom:8px;">📿 오늘의 조언</strong>
-    ${ADVICE_TEXTS[adviceIdx]}
-  `;
+  // 자세히 보기 내용
+  const detailCards = CAT_META.map(({ key, label, icon }) => `
+    <div class="detail-card">
+      <div class="detail-card-icon">${icon}</div>
+      <div class="detail-card-label">${label}</div>
+      <div class="detail-card-text">${FORTUNE_TEXTS[key][levels[key]]}</div>
+    </div>`).join('');
+
+  const luckyBox = `
+    <div class="detail-lucky">
+      🎨 행운의 색&nbsp;<span>${luckyColor}</span>
+      &nbsp;·&nbsp;
+      🔢 행운의 숫자&nbsp;<span>${luckyNum}</span>
+      &nbsp;·&nbsp;
+      🧭 행운의 방향&nbsp;<span>${luckyDir}</span>
+    </div>`;
+
+  document.getElementById('detail-content').innerHTML = detailCards + luckyBox;
 }
 
 // ── 커스텀 달력 피커 ──────────────────────────────────────────

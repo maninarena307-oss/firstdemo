@@ -43,48 +43,21 @@
     </section>
 
     <section class="result-section" id="result" style="display:none;">
-      <div class="saju-info" id="saju-info"></div>
-      <h2 class="result-title" id="result-title"></h2>
+      <!-- 기본 정보 -->
+      <div class="result-header" id="result-header"></div>
 
-      <div class="fortune-grid">
-        <div class="fortune-card" id="card-total">
-          <div class="card-icon">🌟</div>
-          <div class="card-label">총운</div>
-          <div class="card-stars" id="stars-total"></div>
-          <div class="card-text" id="text-total"></div>
-        </div>
-        <div class="fortune-card" id="card-wealth">
-          <div class="card-icon">💰</div>
-          <div class="card-label">재물운</div>
-          <div class="card-stars" id="stars-wealth"></div>
-          <div class="card-text" id="text-wealth"></div>
-        </div>
-        <div class="fortune-card" id="card-love">
-          <div class="card-icon">💕</div>
-          <div class="card-label">애정운</div>
-          <div class="card-stars" id="stars-love"></div>
-          <div class="card-text" id="text-love"></div>
-        </div>
-        <div class="fortune-card" id="card-health">
-          <div class="card-icon">🌿</div>
-          <div class="card-label">건강운</div>
-          <div class="card-stars" id="stars-health"></div>
-          <div class="card-text" id="text-health"></div>
-        </div>
-        <div class="fortune-card" id="card-work">
-          <div class="card-icon">💼</div>
-          <div class="card-label">직업운</div>
-          <div class="card-stars" id="stars-work"></div>
-          <div class="card-text" id="text-work"></div>
-        </div>
-        <div class="fortune-card" id="card-lucky">
-          <div class="card-icon">🍀</div>
-          <div class="card-label">행운 정보</div>
-          <div class="card-text" id="text-lucky"></div>
-        </div>
-      </div>
+      <!-- 속도계 게이지 -->
+      <div class="gauge-grid" id="gauge-grid"></div>
 
-      <div class="advice-box" id="advice-box"></div>
+      <!-- 오늘의 조언 -->
+      <div class="advice-simple" id="advice-simple"></div>
+
+      <!-- 자세히 보기 -->
+      <details class="detail-section">
+        <summary class="detail-toggle">자세히 보기</summary>
+        <div class="detail-content" id="detail-content"></div>
+      </details>
+
       <button class="retry-btn" id="retry-btn">다시 보기</button>
     </section>
   </div>

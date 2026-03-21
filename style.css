@@ -153,97 +153,200 @@ button#fortune-btn:active {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.saju-info {
+/* 결과 헤더 */
+.result-header {
   text-align: center;
-  background: rgba(255, 215, 0, 0.08);
+  background: rgba(255, 215, 0, 0.06);
   border: 1px solid rgba(255, 215, 0, 0.2);
   border-radius: 12px;
   padding: 16px 24px;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   color: #ffd700;
-  font-size: 1rem;
+  font-size: 0.95rem;
   letter-spacing: 1px;
-  line-height: 1.8;
+  line-height: 1.9;
 }
 
-.result-title {
-  text-align: center;
-  font-size: 1.6rem;
-  color: #ffd700;
-  margin-bottom: 32px;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-}
-
-/* 운세 카드 그리드 */
-.fortune-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
+/* ── 속도계 게이지 ───────────────────────── */
+.gauge-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
   margin-bottom: 32px;
 }
 
-.fortune-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 215, 0, 0.15);
-  border-radius: 12px;
-  padding: 24px 20px;
-  text-align: center;
-  transition: transform 0.2s, border-color 0.2s;
-  animation: cardIn 0.5s ease both;
+.gauge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 130px;
+  animation: gaugeIn 0.5s ease both;
 }
 
-.fortune-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(255, 215, 0, 0.4);
-}
+.gauge-item:nth-child(1) { animation-delay: 0.05s; }
+.gauge-item:nth-child(2) { animation-delay: 0.15s; }
+.gauge-item:nth-child(3) { animation-delay: 0.25s; }
+.gauge-item:nth-child(4) { animation-delay: 0.35s; }
+.gauge-item:nth-child(5) { animation-delay: 0.45s; }
 
-@keyframes cardIn {
-  from { opacity: 0; transform: translateY(16px); }
+@keyframes gaugeIn {
+  from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.fortune-card:nth-child(1) { animation-delay: 0.1s; }
-.fortune-card:nth-child(2) { animation-delay: 0.2s; }
-.fortune-card:nth-child(3) { animation-delay: 0.3s; }
-.fortune-card:nth-child(4) { animation-delay: 0.4s; }
-.fortune-card:nth-child(5) { animation-delay: 0.5s; }
-.fortune-card:nth-child(6) { animation-delay: 0.6s; }
-
-.card-icon {
-  font-size: 2rem;
-  margin-bottom: 8px;
+.gauge-svg {
+  width: 100%;
+  overflow: visible;
 }
 
-.card-label {
+.gauge-track {
+  fill: none;
+  stroke: #1e1e36;
+  stroke-width: 11;
+  stroke-linecap: round;
+}
+
+.gauge-fill {
+  fill: none;
+  stroke-width: 11;
+  stroke-linecap: round;
+  stroke-dashoffset: var(--offset);
+  stroke-dasharray: var(--dash) var(--total);
+  animation: gaugeFill 1s cubic-bezier(0.4,0,0.2,1) both;
+}
+
+@keyframes gaugeFill {
+  from { stroke-dasharray: 0 var(--total); }
+  to   { stroke-dasharray: var(--dash) var(--total); }
+}
+
+.gauge-level-text {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Noto Serif KR', serif;
+}
+
+.gauge-icon {
+  font-size: 1.3rem;
+  margin-top: -2px;
+}
+
+.gauge-label {
+  color: #a89070;
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+/* ── 간단 조언 ───────────────────────────── */
+.advice-simple {
+  background: rgba(255, 215, 0, 0.05);
+  border: 1px solid rgba(255, 215, 0, 0.18);
+  border-radius: 12px;
+  padding: 20px 28px;
+  margin-bottom: 24px;
+  color: #d4c4a0;
+  font-size: 0.95rem;
+  line-height: 1.9;
+  text-align: center;
+}
+
+.advice-simple::before {
+  content: '📿 오늘의 조언';
+  display: block;
   color: #ffd700;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+/* ── 자세히 보기 ─────────────────────────── */
+.detail-section {
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  border-radius: 12px;
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+
+.detail-toggle {
+  width: 100%;
+  padding: 16px 24px;
+  cursor: pointer;
+  color: #ffd700;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  font-family: inherit;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.detail-toggle:hover {
+  background: rgba(255, 215, 0, 0.05);
+}
+
+.detail-toggle::after {
+  content: '▼';
+  font-size: 0.7rem;
+  transition: transform 0.3s;
+}
+
+.detail-section[open] .detail-toggle::after {
+  transform: rotate(180deg);
+}
+
+/* webkit summary arrow 제거 */
+.detail-toggle::-webkit-details-marker { display: none; }
+
+.detail-content {
+  padding: 0 20px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.detail-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 215, 0, 0.1);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+}
+
+.detail-card-icon { font-size: 1.6rem; margin-bottom: 6px; }
+.detail-card-label {
+  color: #ffd700;
+  font-size: 0.78rem;
   letter-spacing: 2px;
   margin-bottom: 8px;
 }
-
-.card-stars {
-  margin-bottom: 12px;
-  font-size: 1rem;
-  letter-spacing: 2px;
-}
-
-.card-text {
-  color: #c8b89a;
-  font-size: 0.88rem;
+.detail-card-text {
+  color: #b0a090;
+  font-size: 0.82rem;
   line-height: 1.7;
 }
 
-/* 조언 박스 */
-.advice-box {
-  background: rgba(255, 215, 0, 0.06);
-  border-left: 3px solid #ffd700;
-  border-radius: 8px;
-  padding: 20px 24px;
-  margin-bottom: 32px;
-  color: #d4b896;
-  line-height: 1.9;
-  font-size: 0.95rem;
+.detail-lucky {
+  grid-column: 1 / -1;
+  background: rgba(255, 215, 0, 0.04);
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  border-radius: 10px;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  color: #c8b89a;
+  font-size: 0.88rem;
+  line-height: 2;
 }
+
+.detail-lucky span { color: #ffd700; font-weight: 700; }
 
 .retry-btn {
   display: block;
@@ -472,5 +575,6 @@ button#fortune-btn:active {
 @media (max-width: 480px) {
   h1 { font-size: 1.8rem; }
   .form-section { padding: 24px; }
-  .fortune-grid { grid-template-columns: 1fr 1fr; }
+  .gauge-item { width: 108px; }
+  .detail-content { grid-template-columns: 1fr 1fr; }
 }
