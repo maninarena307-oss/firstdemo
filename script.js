@@ -180,13 +180,182 @@ function renderResult(data) {
   `;
 }
 
+// ── 커스텀 달력 피커 ──────────────────────────────────────────
+const MONTHS_KR = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+const WEEKDAYS_KR = ['일','월','화','수','목','금','토'];
+
+class DatePicker {
+  constructor() {
+    this.popup     = document.getElementById('calendar-popup');
+    this.display   = document.getElementById('birthdate-display');
+    this.hidden    = document.getElementById('birthdate');
+    this.yearBtn   = document.getElementById('cal-year-btn');
+    this.monthBtn  = document.getElementById('cal-month-btn');
+    this.body      = document.getElementById('cal-body');
+    this.prevBtn   = document.getElementById('cal-prev');
+    this.nextBtn   = document.getElementById('cal-next');
+
+    const now = new Date();
+    this.viewYear  = now.getFullYear() - 25; // 기본 보기: 25년 전
+    this.viewMonth = now.getMonth();          // 0-indexed
+    this.selYear   = null;
+    this.selMonth  = null;
+    this.selDay    = null;
+    this.mode      = 'day'; // 'day' | 'month' | 'year'
+    this.yearPageStart = Math.floor(this.viewYear / 16) * 16;
+
+    this.bind();
+  }
+
+  bind() {
+    this.display.addEventListener('click', (e) => { e.stopPropagation(); this.open(); });
+    this.prevBtn.addEventListener('click', (e) => { e.stopPropagation(); this.prev(); });
+    this.nextBtn.addEventListener('click', (e) => { e.stopPropagation(); this.next(); });
+    this.yearBtn.addEventListener('click',  (e) => { e.stopPropagation(); this.setMode('year'); });
+    this.monthBtn.addEventListener('click', (e) => { e.stopPropagation(); this.setMode('month'); });
+    document.addEventListener('click', () => this.close());
+    this.popup.addEventListener('click', (e) => e.stopPropagation());
+  }
+
+  open() {
+    this.mode = 'day';
+    this.render();
+    this.popup.classList.add('open');
+  }
+
+  close() {
+    this.popup.classList.remove('open');
+  }
+
+  setMode(m) {
+    this.mode = m;
+    this.render();
+  }
+
+  prev() {
+    if (this.mode === 'day') {
+      this.viewMonth--;
+      if (this.viewMonth < 0) { this.viewMonth = 11; this.viewYear--; }
+    } else if (this.mode === 'month') {
+      this.viewYear--;
+    } else {
+      this.yearPageStart -= 16;
+    }
+    this.render();
+  }
+
+  next() {
+    if (this.mode === 'day') {
+      this.viewMonth++;
+      if (this.viewMonth > 11) { this.viewMonth = 0; this.viewYear++; }
+    } else if (this.mode === 'month') {
+      this.viewYear++;
+    } else {
+      this.yearPageStart += 16;
+    }
+    this.render();
+  }
+
+  render() {
+    this.yearBtn.textContent  = `${this.viewYear}년`;
+    this.monthBtn.textContent = MONTHS_KR[this.viewMonth];
+
+    if (this.mode === 'year')  { this.renderYearGrid();  return; }
+    if (this.mode === 'month') { this.renderMonthGrid(); return; }
+    this.renderDayGrid();
+  }
+
+  renderDayGrid() {
+    const today = new Date();
+    const firstDay = new Date(this.viewYear, this.viewMonth, 1).getDay();
+    const daysInMonth = new Date(this.viewYear, this.viewMonth + 1, 0).getDate();
+
+    let html = `<div class="cal-weekdays">`;
+    WEEKDAYS_KR.forEach(d => { html += `<div class="cal-weekday">${d}</div>`; });
+    html += `</div><div class="cal-days">`;
+
+    // 빈 칸
+    for (let i = 0; i < firstDay; i++) html += `<div class="cal-day empty"></div>`;
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dow = (firstDay + d - 1) % 7;
+      const isToday  = today.getFullYear() === this.viewYear && today.getMonth() === this.viewMonth && today.getDate() === d;
+      const isSel    = this.selYear === this.viewYear && this.selMonth === this.viewMonth && this.selDay === d;
+      const cls = [
+        'cal-day',
+        dow === 0 ? 'sun' : dow === 6 ? 'sat' : '',
+        isToday ? 'today' : '',
+        isSel   ? 'selected' : '',
+      ].filter(Boolean).join(' ');
+      html += `<button class="${cls}" data-day="${d}">${d}</button>`;
+    }
+    html += `</div>`;
+    this.body.innerHTML = html;
+
+    this.body.querySelectorAll('.cal-day[data-day]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.selYear  = this.viewYear;
+        this.selMonth = this.viewMonth;
+        this.selDay   = parseInt(btn.dataset.day);
+        this.commit();
+      });
+    });
+  }
+
+  renderMonthGrid() {
+    let html = `<div class="cal-month-grid">`;
+    MONTHS_KR.forEach((m, i) => {
+      const isSel = this.selYear === this.viewYear && this.selMonth === i;
+      html += `<button class="cal-month-item${isSel ? ' selected' : ''}" data-month="${i}">${m}</button>`;
+    });
+    html += `</div>`;
+    this.body.innerHTML = html;
+
+    this.body.querySelectorAll('.cal-month-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.viewMonth = parseInt(btn.dataset.month);
+        this.mode = 'day';
+        this.render();
+      });
+    });
+  }
+
+  renderYearGrid() {
+    const endYear = this.yearPageStart + 15;
+    let html = `<div class="cal-year-nav"><span>${this.yearPageStart} – ${endYear}</span></div><div class="cal-year-grid">`;
+    for (let y = this.yearPageStart; y <= endYear; y++) {
+      const isSel = this.selYear === y;
+      html += `<button class="cal-year-item${isSel ? ' selected' : ''}" data-year="${y}">${y}</button>`;
+    }
+    html += `</div>`;
+    this.body.innerHTML = html;
+
+    this.body.querySelectorAll('.cal-year-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.viewYear = parseInt(btn.dataset.year);
+        this.mode = 'month';
+        this.render();
+      });
+    });
+  }
+
+  commit() {
+    const m = String(this.selMonth + 1).padStart(2, '0');
+    const d = String(this.selDay).padStart(2, '0');
+    this.hidden.value  = `${this.selYear}-${m}-${d}`;
+    this.display.value = `${this.selYear}년 ${this.selMonth + 1}월 ${this.selDay}일`;
+    this.close();
+  }
+}
+
 // ── 이벤트 바인딩 ─────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   createStars();
+  new DatePicker();
 
   document.getElementById('fortune-btn').addEventListener('click', () => {
     const name = document.getElementById('name').value.trim();
-    const birthdate = document.getElementById('birthdate').value;
+    const birthdate = document.getElementById('birthdate').value; // hidden input
 
     if (!name) {
       alert('이름을 입력해 주세요.');

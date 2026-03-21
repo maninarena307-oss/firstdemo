@@ -264,6 +264,210 @@ button#fortune-btn:active {
   background: rgba(255, 215, 0, 0.1);
 }
 
+/* ── 커스텀 달력 ─────────────────────────────── */
+.date-picker-wrapper {
+  position: relative;
+}
+
+#birthdate-display {
+  cursor: pointer;
+}
+
+#birthdate-display:hover {
+  border-color: #ffd700;
+}
+
+.calendar-popup {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  max-width: 320px;
+  background: #12122a;
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  animation: calIn 0.2s ease;
+}
+
+.calendar-popup.open {
+  display: block;
+}
+
+@keyframes calIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.cal-nav {
+  background: transparent;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 6px;
+  color: #ffd700;
+  font-size: 1.2rem;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+
+.cal-nav:hover {
+  background: rgba(255, 215, 0, 0.15);
+}
+
+.cal-title {
+  display: flex;
+  gap: 6px;
+}
+
+.cal-year-btn,
+.cal-month-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 215, 0, 0.25);
+  border-radius: 6px;
+  color: #ffd700;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: inherit;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cal-year-btn:hover,
+.cal-month-btn:hover {
+  background: rgba(255, 215, 0, 0.15);
+}
+
+/* 요일 헤더 */
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 6px;
+}
+
+.cal-weekday {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #a89070;
+  padding: 4px 0;
+}
+
+.cal-weekday:first-child { color: #ff7b7b; }
+.cal-weekday:last-child  { color: #7baeff; }
+
+/* 날짜 그리드 */
+.cal-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.cal-day {
+  text-align: center;
+  padding: 7px 2px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: #e8d5b0;
+  transition: background 0.12s, color 0.12s;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+}
+
+.cal-day:hover:not(.empty):not(.other-month) {
+  background: rgba(255, 215, 0, 0.15);
+}
+
+.cal-day.today {
+  border: 1px solid rgba(255, 215, 0, 0.4);
+}
+
+.cal-day.selected {
+  background: #ffd700;
+  color: #0a0a1a;
+  font-weight: 700;
+}
+
+.cal-day.other-month {
+  color: #444;
+  cursor: default;
+}
+
+.cal-day.empty {
+  cursor: default;
+}
+
+.cal-day.sun { color: #ff7b7b; }
+.cal-day.sat { color: #7baeff; }
+.cal-day.selected.sun,
+.cal-day.selected.sat { color: #0a0a1a; }
+
+/* 연도 선택 그리드 */
+.cal-year-grid,
+.cal-month-grid {
+  display: grid;
+  gap: 6px;
+}
+
+.cal-year-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.cal-month-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.cal-year-item,
+.cal-month-item {
+  text-align: center;
+  padding: 8px 4px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: #e8d5b0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  transition: background 0.12s;
+}
+
+.cal-year-item:hover,
+.cal-month-item:hover {
+  background: rgba(255, 215, 0, 0.15);
+}
+
+.cal-year-item.selected,
+.cal-month-item.selected {
+  background: #ffd700;
+  color: #0a0a1a;
+  font-weight: 700;
+}
+
+.cal-year-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  color: #ffd700;
+  font-size: 0.9rem;
+}
+
 /* 반응형 */
 @media (max-width: 480px) {
   h1 { font-size: 1.8rem; }

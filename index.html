@@ -22,8 +22,22 @@
         <input type="text" id="name" placeholder="이름을 입력하세요" maxlength="10" />
       </div>
       <div class="input-group">
-        <label for="birthdate">생년월일</label>
-        <input type="date" id="birthdate" />
+        <label>생년월일</label>
+        <div class="date-picker-wrapper">
+          <input type="text" id="birthdate-display" placeholder="날짜를 선택하세요 📅" readonly />
+          <input type="hidden" id="birthdate" />
+          <div class="calendar-popup" id="calendar-popup">
+            <div class="cal-header">
+              <button class="cal-nav" id="cal-prev">‹</button>
+              <div class="cal-title">
+                <button class="cal-year-btn" id="cal-year-btn"></button>
+                <button class="cal-month-btn" id="cal-month-btn"></button>
+              </div>
+              <button class="cal-nav" id="cal-next">›</button>
+            </div>
+            <div class="cal-body" id="cal-body"></div>
+          </div>
+        </div>
       </div>
       <button id="fortune-btn">운세 보기 ✨</button>
     </section>
