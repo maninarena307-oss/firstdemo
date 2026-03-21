@@ -571,6 +571,180 @@ button#fortune-btn:active {
   font-size: 0.9rem;
 }
 
+/* ── 자세히 보기 구분 제목 ──────────────────── */
+.detail-today-title,
+.detail-saju-title {
+  grid-column: 1 / -1;
+  color: #ffd700;
+  font-size: 0.78rem;
+  letter-spacing: 3px;
+  padding: 12px 0 4px;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+  margin-bottom: 4px;
+}
+
+.detail-saju-title { margin-top: 8px; }
+
+/* ── 사주풀이 섹션 ───────────────────────────── */
+.saju-reading {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sr-section {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,215,0,0.1);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+
+.sr-title {
+  color: #ffd700;
+  font-size: 0.88rem;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.sr-desc {
+  color: #786858;
+  font-size: 0.78rem;
+  margin-bottom: 14px;
+}
+
+/* 사주 팔자표 */
+.saju-table-wrap {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.saju-col {
+  flex: 1;
+  max-width: 140px;
+  text-align: center;
+  background: rgba(255,215,0,0.04);
+  border: 1px solid rgba(255,215,0,0.12);
+  border-radius: 8px;
+  padding: 12px 8px;
+}
+
+.saju-col-label {
+  font-size: 0.7rem;
+  color: #786858;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.saju-stem {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffd700;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.saju-branch {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #c8b89a;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.saju-el {
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+}
+
+/* 일간 분석 */
+.sr-personality {
+  color: #c8b89a;
+  font-size: 0.88rem;
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+
+.sr-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sr-tag {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+.sr-tag.good    { background: rgba(46,204,113,0.12); color: #2ecc71; border: 1px solid rgba(46,204,113,0.2); }
+.sr-tag.caution { background: rgba(231,76,60,0.1);   color: #e74c3c; border: 1px solid rgba(231,76,60,0.2); }
+
+/* 오행 균형 바 */
+.el-bars { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+
+.el-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.el-name {
+  width: 36px;
+  font-size: 0.8rem;
+  color: #c8b89a;
+  flex-shrink: 0;
+}
+
+.el-bar-wrap {
+  flex: 1;
+  height: 8px;
+  background: #1e1e36;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.el-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+.el-cnt {
+  width: 16px;
+  font-size: 0.78rem;
+  color: #786858;
+  text-align: right;
+}
+
+.el-summary {
+  font-size: 0.82rem;
+  color: #a89070;
+  line-height: 1.7;
+}
+
+/* 종합 해석 */
+.sr-life {
+  color: #c8b89a;
+  font-size: 0.9rem;
+  line-height: 1.9;
+  margin-bottom: 12px;
+}
+
+.sr-tip {
+  background: rgba(255,215,0,0.05);
+  border-left: 2px solid rgba(255,215,0,0.3);
+  padding: 10px 14px;
+  font-size: 0.83rem;
+  color: #a89070;
+  border-radius: 0 6px 6px 0;
+  line-height: 1.7;
+}
+
+.sr-tip strong { color: #ffd700; }
+
 /* 반응형 */
 @media (max-width: 480px) {
   h1 { font-size: 1.8rem; }

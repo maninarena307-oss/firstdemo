@@ -55,6 +55,185 @@ const ADVICE_TEXTS = [
   '오늘은 평소에 감사했지만 표현하지 못했던 것들을 말로 전해보세요. 진심 어린 감사는 더 큰 행운을 불러옵니다.',
 ];
 
+// ── 사주 계산 데이터 ──────────────────────────────────────────
+// 천간/지지의 오행
+const STEM_ELEMENT  = ['목','목','화','화','토','토','금','금','수','수'];
+const BRANCH_ELEMENT = ['수','토','목','목','토','화','화','토','금','금','토','수'];
+// 월지: 1월=축(1), 2월=인(2), ..., 12월=자(0) 순서
+const MONTH_BRANCH_IDX = [1,2,3,4,5,6,7,8,9,10,11,0];
+// 인월(2월) 시작 월간: 갑기년→병(2), 을경년→무(4), 병신년→경(6), 정임년→임(8), 무계년→갑(0)
+const MONTH_STEM_START  = [2,4,6,8,0,2,4,6,8,0];
+
+// 일간별 사주 기질 해석
+const DAY_STEM_INFO = {
+  '갑': { element:'목', emoji:'🌳', keyword:'개척자',
+    personality:'리더십이 강하고 직선적인 성격으로, 새로운 일을 시작하는 데 탁월합니다. 독립심이 강하며 남에게 의지하기보다 스스로 길을 개척합니다.',
+    strength:'추진력, 용기, 솔직함',
+    weakness:'고집, 융통성 부족, 급한 성미',
+    life:'큰 뜻을 품고 성장하는 나무처럼, 꾸준한 노력이 결국 높은 성취를 만들어냅니다. 협력과 유연성을 기르면 더 큰 성공이 따릅니다.' },
+  '을': { element:'목', emoji:'🌿', keyword:'유연함',
+    personality:'부드럽고 감수성이 풍부하며 상대방의 마음을 잘 헤아립니다. 예술적 감각이 뛰어나고 적응력이 강해 어떤 환경에서도 자리를 잡습니다.',
+    strength:'공감 능력, 예술성, 적응력',
+    weakness:'우유부단, 의존성, 소심함',
+    life:'넝쿨처럼 주변과 조화를 이루며 성장합니다. 인간관계에서 진가를 발휘하며, 꾸준한 노력이 쌓여 단단한 결실을 맺게 됩니다.' },
+  '병': { element:'화', emoji:'☀️', keyword:'열정가',
+    personality:'밝고 열정적이며 사교성이 뛰어납니다. 창의적이고 표현력이 풍부하여 주변 사람들에게 활력을 불어넣는 존재입니다.',
+    strength:'창의성, 사교성, 표현력',
+    weakness:'충동적, 지속력 부족, 자기중심적',
+    life:'태양처럼 주변을 밝히는 삶을 삽니다. 화려한 재능으로 많은 이들에게 영향을 미치지만, 내면의 꾸준함을 기를수록 더 큰 빛을 발합니다.' },
+  '정': { element:'화', emoji:'🕯️', keyword:'지혜자',
+    personality:'섬세하고 지혜로우며 원칙을 중시합니다. 조용하지만 강한 내면의 불꽃으로 목표를 향해 흔들리지 않고 나아갑니다.',
+    strength:'집중력, 원칙, 섬세함',
+    weakness:'완고함, 감정 기복, 예민함',
+    life:'촛불처럼 작지만 강한 빛으로 주변을 밝힙니다. 깊은 내면의 지혜가 어두운 상황에서도 길을 찾게 해주는 힘이 됩니다.' },
+  '무': { element:'토', emoji:'⛰️', keyword:'포용자',
+    personality:'믿음직하고 포용력이 넓습니다. 안정감을 주는 존재로 주변 사람들의 의지처가 됩니다. 신중하고 책임감이 강합니다.',
+    strength:'신뢰감, 포용력, 안정감',
+    weakness:'보수적, 느린 결정, 변화 거부',
+    life:'큰 산처럼 변함없이 주변을 감싸안는 삶입니다. 시간이 지날수록 쌓이는 신뢰와 덕으로 많은 이들의 버팀목이 됩니다.' },
+  '기': { element:'토', emoji:'🌾', keyword:'봉사자',
+    personality:'세심하고 실용적이며 남을 위해 헌신합니다. 꼼꼼한 성격으로 맡은 일을 끝까지 해내며, 보이지 않는 곳에서 빛나는 사람입니다.',
+    strength:'성실함, 세심함, 배려심',
+    weakness:'자기주장 부족, 우유부단, 지나친 걱정',
+    life:'비옥한 대지처럼 조용히 모든 것을 품고 키워냅니다. 꾸준한 성실함이 결국 풍성한 결실로 돌아오는 삶입니다.' },
+  '경': { element:'금', emoji:'⚔️', keyword:'결단가',
+    personality:'결단력이 강하고 의리와 원칙을 중요하게 여깁니다. 강인한 의지력으로 역경을 헤쳐나가며 목표를 반드시 이루고야 맙니다.',
+    strength:'결단력, 의리, 추진력',
+    weakness:'완고함, 타협 어려움, 강압적',
+    life:'단단한 금속처럼 어떤 압력에도 굴하지 않는 강인함을 지닙니다. 정의감과 실행력으로 큰 일을 이루지만, 유연성을 기르면 더욱 빛납니다.' },
+  '신': { element:'금', emoji:'💎', keyword:'완벽주의자',
+    personality:'날카로운 감각과 완벽을 추구하는 성향을 지녔습니다. 심미안이 뛰어나고 섬세하며, 높은 기준으로 자신과 주변을 대합니다.',
+    strength:'완벽주의, 감수성, 분석력',
+    weakness:'예민함, 비판적, 자기 검열 과다',
+    life:'정교하게 세공된 보석처럼 빛나는 재능을 지닙니다. 높은 이상과 섬세한 감각으로 자신만의 영역을 구축하는 삶입니다.' },
+  '임': { element:'수', emoji:'🌊', keyword:'탐구자',
+    personality:'지혜롭고 자유로우며 새로운 것에 대한 탐구심이 강합니다. 융통성이 뛰어나 어떤 상황에도 적응하며, 넓은 시야를 지녔습니다.',
+    strength:'지혜, 자유로움, 적응력',
+    weakness:'주관 없음, 변덕, 실행력 부족',
+    life:'큰 강처럼 막힘 없이 흘러가는 삶입니다. 풍부한 지혜와 넓은 시야로 많은 것을 담아내며, 결국 큰 바다에 이르게 됩니다.' },
+  '계': { element:'수', emoji:'🌧️', keyword:'직관가',
+    personality:'깊은 감성과 뛰어난 직관력을 지녔습니다. 신중하고 사려 깊으며 타인의 감정을 민감하게 파악합니다. 내면세계가 풍부합니다.',
+    strength:'직관력, 감수성, 신중함',
+    weakness:'소극적, 우울 경향, 결단력 부족',
+    life:'이슬처럼 조용하지만 깊이 있는 삶입니다. 풍부한 감성과 직관이 예술·학문·상담 분야에서 크게 빛을 발합니다.' },
+};
+
+const ELEMENT_COLOR = { '목':'#4caf50', '화':'#f44336', '토':'#ff9800', '금':'#9e9e9e', '수':'#2196f3' };
+const ELEMENT_EMOJI = { '목':'🌳', '화':'🔥', '토':'🌏', '금':'⚡', '수':'💧' };
+
+// ── 사주 기둥 계산 함수 ───────────────────────────────────────
+function getMonthPillar(year, month) {
+  const yearStemIdx  = ((year - 4) % 10 + 10) % 10;
+  const branchIdx    = MONTH_BRANCH_IDX[month - 1];
+  const startStem    = MONTH_STEM_START[yearStemIdx];
+  const monthsFromIn = (branchIdx - 2 + 12) % 12;
+  const stemIdx      = (startStem + monthsFromIn) % 10;
+  return { stem: HEAVENLY_STEMS[stemIdx], branch: EARTHLY_BRANCHES[branchIdx], stemIdx, branchIdx };
+}
+
+function getDayPillar(year, month, day) {
+  // 기준: 2000-01-01 = 戊辰일 (stem=4 무, branch=4 진)
+  const ref  = new Date(2000, 0, 1);
+  const diff = Math.round((new Date(year, month - 1, day) - ref) / 86400000);
+  const stemIdx   = ((4 + diff) % 10 + 10) % 10;
+  const branchIdx = ((4 + diff) % 12 + 12) % 12;
+  return { stem: HEAVENLY_STEMS[stemIdx], branch: EARTHLY_BRANCHES[branchIdx], stemIdx, branchIdx };
+}
+
+// 오행 카운트 (년주+월주+일주 각 천간·지지 = 총 6글자)
+function countElements(yP, mP, dP) {
+  const count = { '목':0, '화':0, '토':0, '금':0, '수':0 };
+  [yP, mP, dP].forEach(p => {
+    count[STEM_ELEMENT[p.stemIdx]]++;
+    count[BRANCH_ELEMENT[p.branchIdx]]++;
+  });
+  return count;
+}
+
+// ── 사주풀이 HTML 생성 ────────────────────────────────────────
+function buildSajuReading(birthYear, birthMonth, birthDay, name) {
+  const yearStemIdx   = ((birthYear - 4) % 10 + 10) % 10;
+  const yearBranchIdx = ((birthYear - 4) % 12 + 12) % 12;
+  const yP = { stem: HEAVENLY_STEMS[yearStemIdx], branch: EARTHLY_BRANCHES[yearBranchIdx], stemIdx: yearStemIdx, branchIdx: yearBranchIdx };
+  const mP = getMonthPillar(birthYear, birthMonth);
+  const dP = getDayPillar(birthYear, birthMonth, birthDay);
+
+  const info    = DAY_STEM_INFO[dP.stem];
+  const elCount = countElements(yP, mP, dP);
+  const maxEl   = Math.max(...Object.values(elCount));
+  const dominant = Object.keys(elCount).filter(e => elCount[e] === maxEl);
+  const missing  = Object.keys(elCount).filter(e => elCount[e] === 0);
+
+  // 사주 팔자표
+  const table = `
+    <div class="saju-table-wrap">
+      <div class="saju-col">
+        <div class="saju-col-label">일주 (나)</div>
+        <div class="saju-stem">${dP.stem}</div>
+        <div class="saju-branch">${dP.branch}</div>
+        <div class="saju-el" style="color:${ELEMENT_COLOR[STEM_ELEMENT[dP.stemIdx]]}">${STEM_ELEMENT[dP.stemIdx]}</div>
+      </div>
+      <div class="saju-col">
+        <div class="saju-col-label">월주 (부모·형제)</div>
+        <div class="saju-stem">${mP.stem}</div>
+        <div class="saju-branch">${mP.branch}</div>
+        <div class="saju-el" style="color:${ELEMENT_COLOR[STEM_ELEMENT[mP.stemIdx]]}">${STEM_ELEMENT[mP.stemIdx]}</div>
+      </div>
+      <div class="saju-col">
+        <div class="saju-col-label">년주 (조상·사회)</div>
+        <div class="saju-stem">${yP.stem}</div>
+        <div class="saju-branch">${yP.branch}</div>
+        <div class="saju-el" style="color:${ELEMENT_COLOR[STEM_ELEMENT[yP.stemIdx]]}">${STEM_ELEMENT[yP.stemIdx]}</div>
+      </div>
+    </div>`;
+
+  // 오행 균형 바
+  const elBar = Object.entries(elCount).map(([el, cnt]) => `
+    <div class="el-row">
+      <div class="el-name">${ELEMENT_EMOJI[el]} ${el}</div>
+      <div class="el-bar-wrap">
+        <div class="el-bar" style="width:${(cnt/6)*100}%;background:${ELEMENT_COLOR[el]}"></div>
+      </div>
+      <div class="el-cnt">${cnt}</div>
+    </div>`).join('');
+
+  const dominantStr = dominant.map(e => `${ELEMENT_EMOJI[e]}${e}`).join(', ');
+  const missingStr  = missing.length ? missing.map(e => `${ELEMENT_EMOJI[e]}${e}`).join(', ') : '없음 (균형)';
+
+  return `
+    <div class="saju-reading">
+      <div class="sr-section">
+        <div class="sr-title">📋 사주 팔자표</div>
+        <div class="sr-desc">천간(위)은 하늘의 기운, 지지(아래)는 땅의 기운을 나타냅니다.</div>
+        ${table}
+      </div>
+
+      <div class="sr-section">
+        <div class="sr-title">${info.emoji} 일간 분석 — ${dP.stem}(${info.element}) · ${info.keyword}</div>
+        <div class="sr-personality">${info.personality}</div>
+        <div class="sr-tags">
+          <span class="sr-tag good">강점 · ${info.strength}</span>
+          <span class="sr-tag caution">약점 · ${info.weakness}</span>
+        </div>
+      </div>
+
+      <div class="sr-section">
+        <div class="sr-title">⚖️ 오행 균형</div>
+        <div class="el-bars">${elBar}</div>
+        <div class="el-summary">
+          강한 기운: <span style="color:#ffd700">${dominantStr}</span> &nbsp;|&nbsp;
+          부족한 기운: <span style="color:#a89070">${missingStr}</span>
+        </div>
+      </div>
+
+      <div class="sr-section">
+        <div class="sr-title">🔮 종합 사주 해석</div>
+        <div class="sr-life">${info.life}</div>
+        ${missing.length ? `<div class="sr-tip">💡 부족한 <strong>${missingStr}</strong> 기운을 보완하면 더욱 균형 잡힌 삶을 살 수 있습니다.</div>` : '<div class="sr-tip">💡 오행이 고르게 분포되어 전반적으로 균형 잡힌 사주입니다.</div>'}
+      </div>
+    </div>`;
+}
+
 // ── 유틸리티 ──────────────────────────────────────────────────
 function simpleHash(str) {
   let hash = 0;
@@ -230,7 +409,13 @@ function renderResult(data) {
       🧭 행운의 방향&nbsp;<span>${luckyDir}</span>
     </div>`;
 
-  document.getElementById('detail-content').innerHTML = detailCards + luckyBox;
+  const sajuReading = buildSajuReading(birthYear, birthMonth, birthDay, name);
+
+  document.getElementById('detail-content').innerHTML =
+    `<div class="detail-today-title">오늘의 운세 상세</div>` +
+    detailCards + luckyBox +
+    `<div class="detail-saju-title">나의 사주풀이</div>` +
+    sajuReading;
 }
 
 // ── 커스텀 달력 피커 ──────────────────────────────────────────
