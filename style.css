@@ -752,3 +752,414 @@ button#fortune-btn:active {
   .gauge-item { width: 108px; }
   .detail-content { grid-template-columns: 1fr 1fr; }
 }
+
+/* ── 네비게이션 ─────────────────────────────── */
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(10, 10, 26, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+}
+
+.nav-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  color: #ffd700;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+}
+
+.nav-link {
+  color: #a89070;
+  text-decoration: none;
+  font-size: 0.88rem;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.08);
+}
+
+/* ── 푸터 ───────────────────────────────────── */
+.site-footer {
+  margin-top: 60px;
+  border-top: 1px solid rgba(255, 215, 0, 0.12);
+  padding: 32px 20px;
+}
+
+.footer-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-logo {
+  color: #ffd700;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.footer-links a {
+  color: #786858;
+  text-decoration: none;
+  font-size: 0.82rem;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: #ffd700;
+}
+
+.footer-copy {
+  color: #504040;
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+/* ── 일반 페이지 콘텐츠 ──────────────────────── */
+.page-content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 0 60px;
+}
+
+.page-title {
+  font-size: 2rem;
+  color: #ffd700;
+  text-align: center;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+.page-subtitle {
+  text-align: center;
+  color: #a89070;
+  font-size: 0.95rem;
+  margin-bottom: 48px;
+  line-height: 1.7;
+}
+
+.page-date {
+  text-align: center;
+  color: #786858;
+  font-size: 0.82rem;
+  margin-bottom: 40px;
+}
+
+/* ── 개인정보/소개 섹션 ──────────────────────── */
+.policy-section {
+  margin-bottom: 36px;
+}
+
+.policy-section h2 {
+  color: #ffd700;
+  font-size: 1.05rem;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.12);
+}
+
+.policy-section p,
+.policy-section li {
+  color: #b0a090;
+  font-size: 0.9rem;
+  line-height: 1.9;
+  margin-bottom: 8px;
+}
+
+.policy-section ul {
+  padding-left: 20px;
+}
+
+.policy-section a {
+  color: #ffd700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── 소개 페이지 ──────────────────────────────── */
+.about-hero {
+  text-align: center;
+  background: rgba(255, 215, 0, 0.04);
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  border-radius: 16px;
+  padding: 36px 24px;
+  margin-bottom: 40px;
+  color: #c8b89a;
+  font-size: 0.95rem;
+  line-height: 1.9;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.about-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 215, 0, 0.1);
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.about-card-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.about-card h3 {
+  color: #ffd700;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.about-card p {
+  color: #a89070;
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+/* ── 사주 가이드 페이지 ──────────────────────── */
+.guide-section {
+  margin-bottom: 48px;
+}
+
+.guide-section h2 {
+  color: #ffd700;
+  font-size: 1.15rem;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+}
+
+.guide-section p {
+  color: #b0a090;
+  font-size: 0.9rem;
+  line-height: 1.9;
+  margin-bottom: 20px;
+}
+
+.guide-section strong {
+  color: #ffd700;
+}
+
+.guide-box {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.guide-pillar {
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+  background: rgba(255, 215, 0, 0.05);
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  border-radius: 10px;
+  padding: 18px 12px;
+}
+
+.pillar-name {
+  color: #ffd700;
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.pillar-desc {
+  color: #a89070;
+  font-size: 0.78rem;
+  line-height: 1.7;
+}
+
+.stem-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.stem-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 215, 0, 0.08);
+  border-radius: 8px;
+  padding: 12px 6px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stem-char {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--el-color);
+}
+
+.stem-el {
+  font-size: 0.72rem;
+  color: #786858;
+}
+
+.element-guide-grid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.el-guide-card {
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 20px 12px;
+  opacity: 0.85;
+}
+
+.el-guide-icon {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+
+.el-guide-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.el-guide-card p {
+  color: #a89070;
+  font-size: 0.78rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ── 메인 페이지 정보 섹션 ──────────────────── */
+.info-section {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255, 215, 0, 0.12);
+}
+
+.info-title {
+  font-size: 1.3rem;
+  color: #ffd700;
+  text-align: center;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+}
+
+.info-text {
+  color: #a89070;
+  font-size: 0.9rem;
+  line-height: 1.9;
+  text-align: center;
+  margin-bottom: 32px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.info-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 215, 0, 0.1);
+  border-radius: 10px;
+  padding: 18px 12px;
+  text-align: center;
+}
+
+.info-card-icon { font-size: 1.6rem; margin-bottom: 8px; }
+
+.info-card h3 {
+  color: #ffd700;
+  font-size: 0.88rem;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.info-card p {
+  color: #a89070;
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.info-notice {
+  color: #504040;
+  font-size: 0.78rem;
+  text-align: center;
+  line-height: 1.7;
+}
+
+/* ── CTA 버튼 ────────────────────────────────── */
+.cta-btn {
+  display: inline-block;
+  padding: 14px 40px;
+  background: linear-gradient(135deg, #b8860b, #ffd700, #b8860b);
+  border-radius: 8px;
+  color: #0a0a1a;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.cta-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* ── 반응형 추가 ──────────────────────────────── */
+@media (max-width: 480px) {
+  .nav-link { font-size: 0.78rem; padding: 6px 8px; }
+  .stem-grid { grid-template-columns: repeat(5, 1fr); }
+  .guide-box, .element-guide-grid { flex-direction: column; }
+  .about-grid { grid-template-columns: 1fr 1fr; }
+}
