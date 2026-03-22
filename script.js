@@ -234,6 +234,16 @@ function buildSajuReading(birthYear, birthMonth, birthDay, name) {
     </div>`;
 }
 
+// ── 보안: XSS 방지용 입력값 소독 ─────────────────────────────
+function sanitize(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
 // ── 유틸리티 ──────────────────────────────────────────────────
 function simpleHash(str) {
   let hash = 0;
@@ -378,7 +388,7 @@ function renderResult(data) {
 
   // 헤더
   document.getElementById('result-header').innerHTML =
-    `<strong>${name}</strong>님의 ${todayStr} 운세<br>
+    `<strong>${sanitize(name)}</strong>님의 ${todayStr} 운세<br>
      ${stem}${branch}년 · ${elEmoji[element]} ${element}(${element}) · ${zodiac.emoji} ${zodiac.name}띠 · ${age}세`;
 
   // 게이지 그리드
@@ -597,6 +607,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!name) {
       alert('이름을 입력해 주세요.');
+      return;
+    }
+    if (!/^[가-힣a-zA-Z\s]{1,10}$/.test(name)) {
+      alert('이름은 한글 또는 영문만 입력해 주세요. (최대 10자)');
       return;
     }
     if (!birthdate) {
