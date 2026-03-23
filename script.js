@@ -464,24 +464,6 @@ function getAge(birthYear) {
   return new Date().getFullYear() - birthYear + 1;
 }
 
-// ── 별 배경 생성 ──────────────────────────────────────────────
-function createStars() {
-  const container = document.getElementById('stars');
-  for (let i = 0; i < 120; i++) {
-    const star = document.createElement('div');
-    star.className = 'star';
-    const size = Math.random() * 2.5 + 0.5;
-    star.style.cssText = `
-      width: ${size}px;
-      height: ${size}px;
-      top: ${Math.random() * 100}%;
-      left: ${Math.random() * 100}%;
-      --duration: ${Math.random() * 3 + 2}s;
-      animation-delay: ${Math.random() * 3}s;
-    `;
-    container.appendChild(star);
-  }
-}
 
 // ── 메인 운세 생성 ────────────────────────────────────────────
 function generateFortune(name, birthdate) {
@@ -779,7 +761,6 @@ class DatePicker {
 
 // ── 이벤트 바인딩 ─────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  createStars();
   new DatePicker();
 
   document.getElementById('fortune-btn').addEventListener('click', () => {
