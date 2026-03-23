@@ -279,7 +279,7 @@ function initHanjaPanel() {
     html += `
       <div class="hanja-search-wrap">
         <input class="hanja-search-input" id="hanja-search-input" type="text"
-          placeholder="직접 검색: 예) 물 하  /  빛 영  /  나라 국"
+          placeholder="예) 물 하 · 빛 영 · 나라 국 · 또는 한자 직접 입력: 河 하"
           autocomplete="off" />
         <div class="hanja-search-results" id="hanja-search-results"></div>
       </div>`;
@@ -296,18 +296,46 @@ function initHanjaPanel() {
       if (!q) { searchResults.innerHTML = ''; return; }
 
       const tokens = q.split(/\s+/);
-      // 단일 한글 음절이면 음절로, 아니면 의미 키워드로 구분
-      const soundToken   = tokens.find(t => /^[가-힣]$/.test(t));
+
+      // ① 한자(CJK) 직접 입력 감지
+      const directHanja = q.match(/[\u4E00-\u9FFF\u3400-\u4DBF]/)?.[0];
+      if (directHanja) {
+        const syllableInQuery = tokens.find(t => /^[가-힣]$/.test(t));
+        if (syllableInQuery) {
+          // 음절도 명시 → 바로 적용 버튼
+          searchResults.innerHTML =
+            `<span class="hanja-direct-label">아래 버튼을 눌러 적용하세요</span>` +
+            `<button class="hanja-chip" onclick="selectHanja('${syllableInQuery}','${directHanja}',this)">
+              ${directHanja}<span class="chip-meaning">직접입력 · ${syllableInQuery}</span>
+            </button>`;
+        } else {
+          // 음절 미지정 → 이름의 각 음절에 적용할지 선택
+          const nameSyllables = [...nameInput.value.trim()].filter(ch => /[가-힣]/.test(ch));
+          const uniqueSyllables = [...new Set(nameSyllables)];
+          searchResults.innerHTML =
+            `<span class="hanja-direct-label">어떤 음절에 적용할까요?</span>` +
+            uniqueSyllables.map(s =>
+              `<button class="hanja-chip" onclick="selectHanja('${s}','${directHanja}',this)">
+                ${directHanja}<span class="chip-meaning">${s} 음절에 적용</span>
+              </button>`
+            ).join('');
+        }
+        return;
+      }
+
+      // ② 의미+음절 검색
+      const soundToken    = tokens.find(t => /^[가-힣]$/.test(t));
       const meaningTokens = tokens.filter(t => t !== soundToken && t.length > 0);
 
       let results = HANJA_SEARCH_DB;
-      if (soundToken)        results = results.filter(r => r.s === soundToken);
+      if (soundToken)           results = results.filter(r => r.s === soundToken);
       if (meaningTokens.length) results = results.filter(r =>
         meaningTokens.every(mt => r.m.includes(mt))
       );
 
       if (!results.length) {
-        searchResults.innerHTML = '<span class="hanja-no-result">검색 결과가 없습니다</span>';
+        searchResults.innerHTML =
+          `<span class="hanja-no-result">결과 없음 — 한자를 직접 입력할 수 있어요 (예: 河 하)</span>`;
         return;
       }
 

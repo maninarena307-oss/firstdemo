@@ -178,6 +178,12 @@ body {
   color: var(--text-muted);
   padding: 4px 2px;
 }
+.hanja-direct-label {
+  width: 100%;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
 
 /* ── 달력 ───────────────────────────────────────── */
 .date-picker-wrapper { position: relative; }
