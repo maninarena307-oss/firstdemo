@@ -147,6 +147,38 @@ body {
 }
 .hanja-result strong { color: var(--gold); font-size: 1rem; }
 
+/* ── 한자 검색창 ──────────────────────────────────── */
+.hanja-search-wrap {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
+.hanja-search-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--bg);
+  outline: none;
+  transition: border-color .2s;
+}
+.hanja-search-input:focus { border-color: var(--gold); }
+.hanja-search-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.hanja-no-result {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 4px 2px;
+}
+
 /* ── 달력 ───────────────────────────────────────── */
 .date-picker-wrapper { position: relative; }
 #birthdate-display { cursor: pointer; }
